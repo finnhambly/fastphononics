@@ -23,4 +23,7 @@ ShengBTE
 *.fdb_latexmk
 *.synctex.gz
 *.pdfsync
-T300K
+T300K*
+BTE.*
+FORCE_CONSTANTS*
+CONTROL*
