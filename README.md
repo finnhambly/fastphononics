@@ -11,7 +11,7 @@ If Python 2 is installed as the default when running the `python` command, make 
 
 #### ASE, NumPy, and f90wrap:
 ```
-pip install NumPy ase f90wrap # use pip3 if Python 2 is set as default
+pip install numpy ase f90wrap # use pip3 if Python 2 is set as default
 ```
 
 #### QUIP, Quippy, and GAP
@@ -38,13 +38,16 @@ python
 >>> import quippy
 >>>
 ```
-#### ShengBTE
-Clone the source code, `git clone https://bitbucket.org/sousaw/shengbte.git` and place a suitable `arch.make` file in `ShengBTE/Src`. This is the `arch.make` file I used:
+#### ShengBTE (and spglib)
+Install spglib as described here: https://github.com/atztogo/spglib
+
+Clone the source code for ShengBTE, `git clone https://bitbucket.org/sousaw/shengbte.git`, and place a suitable `arch.make` file in `ShengBTE/Src`. This is the `arch.make` file I used:
 ```
 export FFLAGS=-O2 -Wall
-export LDFLAGS=-L/lib -lsymspg
+export LDFLAGS=-L/lib -lsymspg #replace lib with path to spglib 
 export MPIFC=mpifort
 MKL=-llapack -lblas
 export LAPACK=$(MKL)
 export LIBS=$(LAPACK)
 ```
+Finally, in `shengBTE/Src`, use `make` to create ShengBTE executable.
