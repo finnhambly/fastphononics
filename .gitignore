@@ -1,0 +1,6 @@
+*.dat
+FORCES_FC*
+__pycache__
+*.yaml
+*.hdf5
+shengbte
