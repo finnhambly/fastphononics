@@ -4,3 +4,5 @@ __pycache__
 *.yaml
 *.hdf5
 shengbte
+T300K
+FORCE_CONSTANTS*
