@@ -11,7 +11,7 @@ If Python 2 is installed as the default when running the `python` command, make 
 
 #### ASE, NumPy, and f90wrap:
 ```
-pip install NumPy ase f90wrap #pip3 of Python 2 is default version
+pip install NumPy ase f90wrap # use pip3 if Python 2 is set as default
 ```
 
 #### QUIP, Quippy, and GAP
