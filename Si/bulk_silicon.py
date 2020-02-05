@@ -8,21 +8,16 @@ from phonopy import Phonopy
 from phono3py import Phono3py
 # band structure
 from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
-from phono3py.file_IO import parse_FORCES_FC3
+from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
+    write_fc3_dat, write_fc2_dat)
 
 # SET UP UNIT CELL
 # cell = ase.build.bulk('Si', 'diamond', 5.44)
 a = 5.404
-unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
+unitcell = PhonopyAtoms(symbols=(['Si'] * 2),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[(0, 0, 0),
-                                      (0, 0.5, 0.5),
-                                      (0.5, 0, 0.5),
-                                      (0.5, 0.5, 0),
-                                      (0.25, 0.25, 0.25),
-                                      (0.25, 0.75, 0.75),
-                                      (0.75, 0.25, 0.75),
-                                      (0.75, 0.75, 0.25)])
+                                      (0.25, 0.25, 0.25)])
 
 # SET UP CALCULATOR
 # Stillinger-Weber potential
@@ -39,19 +34,47 @@ calc = sw_pot
 # 2x2x2 supercell of conventional unit cell
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 primitive_matrix = [(0, 0.5, 0.5), (0.5, 0, 0.5), (0.5, 0.5, 0)]
-phonon = Phonopy(unitcell, smat, primitive_matrix)
+phonon = Phono3py(unitcell, smat, primitive_matrix=None)
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS
 print("[Phonopy] Atomic displacements:")
-disps = phonon.get_displacements()
-for d in disps:
-    print("[Phonopy] %d %s" % (d[0], d[1:]))
+disp_dataset = phonon.get_displacement_dataset()
+scells_with_disps = phonon.get_supercells_with_displacements()
+
+
+# CALCULATE DISTANCES
+count = 0
+for i, disp1 in enumerate(disp_dataset['first_atoms']):
+    print("%4d: %4d                %s" % (
+        count + 1,
+        disp1['number'] + 1,
+        np.around(disp1['displacement'], decimals=3)))
+    count += 1
+
+distances = []
+for i, disp1 in enumerate(disp_dataset['first_atoms']):
+    for j, disp2 in enumerate(disp1['second_atoms']):
+        print("%4d: %4d-%4d (%6.3f)  %s %s" % (
+            count + 1,
+            disp1['number'] + 1,
+            disp2['number'] + 1,
+            disp2['pair_distance'],
+            np.around(disp1['displacement'], decimals=3),
+            np.around(disp2['displacement'], decimals=3)))
+        distances.append(disp2['pair_distance'])
+        count += 1
+
+# Find unique pair distances
+distances = np.array(distances)
+distances_int = (distances * 1e5).astype(int)
+unique_distances = np.unique(distances_int) * 1e-5 # up to 5 decimals
+print("Unique pair distances")
+print(unique_distances)
 
 # CALCULATE FORCES
-supercells = phonon.get_supercells_with_displacements()
 set_of_forces = []
-for scell in supercells:
+for scell in scells_with_disps:
     cell = Atoms(symbols=scell.get_chemical_symbols(),
                  scaled_positions=scell.get_scaled_positions(),
                  cell=scell.get_cell(),
@@ -59,33 +82,43 @@ for scell in supercells:
     cell.set_calculator(calc)
     forces = cell.get_forces()
     drift_force = forces.sum(axis=0)
-    print(("[Phonopy] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
+    # print(("[Phonopy] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
     # Simple translational invariance
     for force in forces:
         force -= drift_force / forces.shape[0]
     set_of_forces.append(forces)
 
 # PRODUCE FORCE CONSTANTS
-phonon.produce_force_constants(forces=set_of_forces)
-print('')
-print("[Phonopy] Phonon frequencies at Gamma:")
-for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
-    print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
+phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
+fc3 = phonon.get_fc3()
+fc2 = phonon.get_fc2()
 
-# DOS
-phonon.set_mesh([21, 21, 21])
-phonon.set_total_DOS(tetrahedron_method=True)
-print('')
-print("[Phonopy] Phonon DOS:")
-for omega, dos in np.array(phonon.get_total_DOS()).T:
-    print("%15.7f%15.7f" % (omega, dos))
+import code
+code.interact(local=locals())
 
-# PLOT BAND STRUCTURE
-path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],
-        [0.5, 0.25, 0.75], [0.5, 0.5, 0.5], [0, 0, 0], [0.375, 0.375, 0.75],
-        [0.5, 0.25, 0.75], [0.625, 0.25, 0.625], [0.5, 0, 0.5]]]
-phonon.save(settings={'force_constants': True, 'create_displacements': True})
-labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
-qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
-# phonon.plot_band_structure_and_dos().show()
+# write_FORCES_FC2(disp_dataset, forces_fc2=None, fp=None, filename="FORCES_FC2")
+# write_FORCES_FC3(disp_dataset, forces_fc3=None, fp=None, filename="FORCES_FC3")
+
+# WRITE SECOND-ORDER FORCE CONSTANTS FILE
+w = open("FORCE_CONSTANTS_2ND", 'w')
+w.write("%d %d \n" % (len(fc2), len(fc2)))
+for i, fcs in enumerate(fc2):
+    for j, fcb in enumerate(fcs):
+        w.write(" %d %d\n" % (i+1, j+1))
+        for vec in fcb:
+            w.write("%20.14f %20.14f %20.14f\n" % tuple(vec))
+
+# WRITE THIRD-ORDER FORCE CONSTANTS FILE
+w = open("FORCE_CONSTANTS_3RD", 'w')
+for i in range(fc3.shape[0]):
+    for j in range(fc3.shape[1]):
+        for k in range(fc3.shape[2]):
+            tensor3 = fc3[i, j, k]
+            w.write(" %d \n" % (k+1))
+            w.write(" %d %d %d \n" % (i + 1, j + 1, k + 1))
+            for dim1 in range(tensor3.shape[0]):
+                for dim2 in range(tensor3.shape[1]):
+                    for dim3 in range(tensor3.shape[2]):
+                        w.write(" %d %d %d " % (dim1+1, dim2+1, dim3+1))
+                        w.write("%20.14f \n" % tensor3[dim1,dim2,dim3])
+            w.write("\n")
