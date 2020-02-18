@@ -32,7 +32,7 @@ calc = sw_pot
 
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
-smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 # primitive_matrix = [(0, 0.5, 0.5), (0.5, 0, 0.5), (0.5, 0.5, 0)]
 phonon = Phono3py(unitcell, smat, primitive_matrix=None)
 phonon.generate_displacements(distance=0.03)
@@ -119,3 +119,7 @@ for i in range(fc3.shape[0]):
                         w.write(" %d %d %d " % (dim1+1, dim2+1, dim3+1))
                         w.write("%20.14f \n" % tensor3[dim1,dim2,dim3])
             w.write("\n")
+
+
+# import code
+# code.interact(local=locals())
