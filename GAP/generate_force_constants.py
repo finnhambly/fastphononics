@@ -1,3 +1,7 @@
+import os
+import sys
+import builtins
+import ase.io.castep
 import numpy as np
 import ase, ase.build
 from ase import Atoms
@@ -26,15 +30,22 @@ unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                                       (0.75, 0.75, 0.25)])
 
 # SET UP CALCULATOR
-# Stillinger-Weber potential
-sw_pot = Potential('IP SW', param_str="""<SW_params n_types="3"
-    label="PRB_31_plus_H_Ge"><per_type_data type="1" atomic_num="14" />
-    <per_pair_data atnum_i="14" atnum_j="14" AA="7.049556277" BB="0.6022245584"
-    p="4" q="0" a="1.80" sigma="2.0951" eps="2.1675" />
-    <per_triplet_data atnum_c="14" atnum_j="14" atnum_k="14" lambda="21.0"
-    gamma="1.20" eps="2.1675" />
-    </SW_params>""") #from https://libatoms.github.io/GAP/quippy-potential-tutorial.html
-calc = sw_pot
+# Gaussian Approximation Potentials (GAP)
+orig_dir = os.getcwd()
+model_dir = os.path.dirname(sys.argv[0])
+if model_dir != '':
+    os.chdir(model_dir)
+
+if os.path.exists('gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2'):
+    os.system('bunzip2 gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2')
+
+try:
+    calc = Potential(init_args='Potential xml_label="GAP_2017_6_17_60_4_3_56_165"',
+                                               param_filename='gp_iter6_sparse9k.xml')
+    Potential.__str__ = lambda self: '<GAP Potential>'
+finally:
+    os.chdir(orig_dir)
+no_checkpoint = True
 
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
