@@ -13,10 +13,10 @@ from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
 
 # SET UP UNIT CELL
 # cell = ase.build.bulk('Si', 'diamond', 5.44)
-a = 5.4307098388671875
+a =  5.431020511
 unitcell = PhonopyAtoms(symbols=(['Si'] * 128),
                     cell=np.diag((a, a, a)),
-                    scaled_positions=[(0.0000000000000000,   0.0000000000000000,   0.1428570000000000),
+                    scaled_positions=[(0,   0.000000000000000,   0.1428570000000000),
                     (0.0000000000000000,   0.5000000000000000,   0.2142850000000000),
                     (0.0625000000000000,   0.2500000000000000,   0.1785710000000000),
                     (0.1250000000000000,   0.0000000000000000,   0.2142850000000000),
@@ -161,7 +161,7 @@ calc = sw_pot
 smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
 # primitive_matrix = [(4*a, 0, 0), (0, a, 0), (0, 0, 7*a)]
 # phonon = Phono3py(unitcell, smat, primitive_matrix)
-phonon = Phono3py(unitcell, smat, primitive_matrix=None)
+phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS

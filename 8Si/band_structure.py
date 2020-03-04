@@ -38,8 +38,9 @@ calc = sw_pot
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
-primitive_matrix = [(a, 0, 0), (0, a, 0), (0, 0, a)]
-phonon = Phonopy(unitcell, smat, primitive_matrix)
+# primitive_matrix = [(2*a, 0, 0), (0, 2*a, 0), (0, 0, 2*a)]
+phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
+# print(phonon.get_primitive_matrix())
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS

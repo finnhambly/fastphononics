@@ -159,7 +159,7 @@ calc = sw_pot
 # 2x2x2 supercell of conventional unit cell
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 # primitive_matrix = [(4*a, 0, 0), (0, a, 0), (0, 0, 7*a)]
-phonon = Phonopy(unitcell, smat, primitive_matrix=None)
+phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS
