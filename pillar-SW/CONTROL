@@ -1,0 +1,24 @@
+&allocations
+        nelements=1,
+        natoms=128,
+        ngrid(:)=12 12 12
+&end
+&crystal
+        lfactor=0.1,
+        lattvec(:,1)=21.722839355468750 0 0,
+        lattvec(:,2)=0 5.4307098388671875 0,
+        lattvec(:,3)=0 0 38.014968872070312,
+        elements="Si"
+        types=1 1,
+        positions(:,1)=0.0  0.0  0.0,
+        positions(:,2)=0.25  0.25  0.25
+        scell(:)=2 2 2
+&end
+&parameters
+        T=300.
+        scalebroad=1.0
+&end
+&flags
+        nonanalytic=.TRUE.
+        nanowires=.FALSE.
+&end

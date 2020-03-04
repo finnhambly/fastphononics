@@ -1,0 +1,47 @@
+task      geometry optimization   ! The TASK keyword instructs CASTEP what to do
+
+!task : phonon
+!continuation : default
+
+fix_occupancy : true
+phonon_sum_rule  : true
+
+phonon_method : finitedisplacement
+phonon_fine_method : interpolate
+
+xc_functional   pbe           		! Which exchange-correlation functional to use.
+
+elec_method : dm
+
+opt_strategy    speed         		! Choose algorithms for best speed at expense of memory.
+
+max_scf_cycles : 100
+
+elec_energy_tol : 1.0e-9
+
+grid_scale : 3.0
+fine_grid_scale : 4.0
+
+backup_interval : 8000
+
+geom_force_tol  : 0.00001
+geom_stress_tol : 0.005
+
+geom_max_iter : 300
+num_proc_in_smp : 6
+
+cut_off_energy : 25 eV
+nelectrons : 2
+nextra_bands : 4
+phonon_calc_lo_to_splitting : false
+
+%block devel_code
+Geom: 
+SNAP=T
+PP=T
+:ENDgeom
+PP:
+sw=t
+Nl=t
+:ENDPP
+%endblock devel_code
