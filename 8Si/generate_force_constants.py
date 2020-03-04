@@ -13,7 +13,7 @@ from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
 
 # SET UP UNIT CELL
 # cell = ase.build.bulk('Si', 'diamond', 5.44)
-a = 5.404
+a =  5.431020511
 unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[(0, 0, 0),
