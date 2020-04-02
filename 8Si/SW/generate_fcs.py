@@ -6,13 +6,8 @@ import quippy, quippy.descriptors
 from quippy.potential import Potential
 from phonopy import Phonopy
 from phono3py import Phono3py
-# band structure
-from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
-from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
-    write_fc3_dat, write_fc2_dat)
-from phono3py.phonon3.conductivity_LBTE import get_thermal_conductivity_LBTE
+
 # SET UP UNIT CELL
-# cell = ase.build.bulk('Si', 'diamond', 5.44)
 a =  5.431020511
 unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
@@ -38,7 +33,7 @@ calc = sw_pot
 
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
-smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 # primitive_matrix = [(a, 0, 0), (0, a, 0), (0, 0, a)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
@@ -97,10 +92,6 @@ for scell in scells_with_disps:
 phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
-
-
-# write_FORCES_FC2(disp_dataset, forces_fc2=None, fp=None, filename="FORCES_FC2")
-# write_FORCES_FC3(disp_dataset, forces_fc3=None, fp=None, filename="FORCES_FC3")
 
 # WRITE SECOND-ORDER FORCE CONSTANTS FILE
 w = open("FORCE_CONSTANTS_2ND", 'w')
