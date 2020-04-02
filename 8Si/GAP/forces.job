@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=8-GAP-FCs               # Job name
+#SBATCH --job-name=8-SW-FCs               # Job name
 #SBATCH --mail-type=END,FAIL               # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=finn.hambly@york.ac.uk # Where to send mail
 #SBATCH --ntasks=1                         # Run on a single CPU
 #SBATCH --cpus-per-task=4                  # Number of CPU cores per task
 #SBATCH --mem=1gb                          # Job memory request
 #SBATCH --time=00:30:00                    # Time limit hrs:min:sec
-#SBATCH --output=job_%j.log       # Standard output and error log
+#SBATCH --output=forces_%j.log       # Standard output and error log
 #SBATCH --account=phys-castep-2019         # Project account
  
 echo My working directory is `pwd`
