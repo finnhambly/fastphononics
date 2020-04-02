@@ -1,0 +1,32 @@
+&allocations
+        nelements=1,
+        natoms=8,
+        ngrid(:)=15 15 15 
+&end
+&crystal
+        lfactor=0.1,
+        lattvec(:,1)=5.431020511 0.0  0.0,
+        lattvec(:,2)=0.0  5.431020511  0.0,
+        lattvec(:,3)=0.0  0.0  5.431020511,
+        elements="Si"
+        types=1 1 1 1 1 1 1 1,
+        positions(:,1)=0.0  0.0  0.0,
+        positions(:,2)=0.0  0.5  0.5
+        positions(:,3)=0.5  0.0  0.5
+        positions(:,4)=0.5  0.5  0.0
+        positions(:,5)=0.25  0.25  0.25
+        positions(:,6)=0.25  0.75  0.75
+        positions(:,7)=0.75  0.25  0.75
+        positions(:,8)=0.75  0.75  0.25
+        scell(:)=2 2 2
+&end
+&parameters
+	T_min=300.0
+	T_max=300.0
+	T_step=100.0
+	scalebroad=1.0
+&end
+&flags
+	nonanalytic=.TRUE.
+&end
+

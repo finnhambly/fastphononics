@@ -6,3 +6,7 @@ __pycache__
 shengbte
 T300K
 FORCE_CONSTANTS*
+archive
+gp_iter*
+job*
+BTE*
