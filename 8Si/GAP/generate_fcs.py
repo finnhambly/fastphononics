@@ -156,4 +156,3 @@ print(cond_LBTE.get_kappa())
 
 qpoints = cond_RTA.get_qpoints()
 print(qpoints.shape)
-
