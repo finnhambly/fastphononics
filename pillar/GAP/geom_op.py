@@ -1,3 +1,7 @@
+import os
+import sys
+import builtins
+import ase.io.castep
 import numpy as np
 import ase, ase.build
 from ase import Atoms
@@ -154,6 +158,8 @@ try:
 finally:
     os.chdir(orig_dir)
 no_checkpoint = True
+
+npm.set_calculator(calc)
 
 dyn = FIRE(npm)
 dyn.run(fmax=0.05)
