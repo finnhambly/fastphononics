@@ -7,7 +7,7 @@ from quippy.potential import Potential
 
 # SET UP UNIT CELL
 a = 5.4307098388671875
-npm = Atoms(symbols=(['Si'] * 128),
+npm = Atoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[
                       (0, 0, 0),
@@ -35,5 +35,7 @@ finally:
     os.chdir(orig_dir)
 no_checkpoint = True
 
-dyn = FIRE(npm)
+npm.set_calculator(calc)
+
+dyn = LBFGS(npm)
 dyn.run(fmax=0.05)
