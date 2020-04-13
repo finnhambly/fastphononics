@@ -35,5 +35,7 @@ finally:
     os.chdir(orig_dir)
 no_checkpoint = True
 
-dyn = FIRE(npm)
+npm.set_calculator(calc)
+
+dyn = LBFGS(npm)
 dyn.run(fmax=0.05)
