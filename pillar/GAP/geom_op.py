@@ -161,5 +161,5 @@ no_checkpoint = True
 
 npm.set_calculator(calc)
 
-dyn = LBFGS(npm)
+dyn = LBFGS(atoms=npm, trajectory='lbfgs.traj')
 dyn.run(fmax=0.05)
