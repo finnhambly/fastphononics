@@ -43,3 +43,5 @@ npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='lbfgs.traj')
 dyn.run(fmax=0.05)
+
+print(npm.get_scaled_positions())
