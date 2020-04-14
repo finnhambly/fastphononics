@@ -33,7 +33,7 @@ calc = sw_pot
 
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
-smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
+smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
 # primitive_matrix = [(a, 0, 0), (0, a, 0), (0, 0, a)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
@@ -136,3 +136,5 @@ print(cond_LBTE.get_kappa())
 
 qpoints = cond_RTA.get_qpoints()
 print(qpoints.shape)
+print(phonon.get_phonon_data)
+print(qpoints)
