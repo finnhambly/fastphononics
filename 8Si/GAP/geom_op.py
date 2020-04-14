@@ -1,7 +1,11 @@
+import os
+import sys
+import builtins
+import ase.io.castep
 import numpy as np
 import ase, ase.build
 from ase import Atoms
-from ase.optimize import FIRE
+from ase.optimize import LBFGS
 import quippy, quippy.descriptors
 from quippy.potential import Potential
 
