@@ -161,6 +161,6 @@ no_checkpoint = True
 npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='lbfgs.traj')
-dyn.run(fmax=0.05)
+dyn.run(fmax=0.05, steps=600)
 
 print(npm.get_scaled_positions())
