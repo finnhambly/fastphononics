@@ -1,21 +1,21 @@
 #!/bin/bash
-#SBATCH --job-name=40-pillar-geom-op          # Job name
+#SBATCH --job-name=NPM-geom-op             # Job name
 #SBATCH --mail-type=END,FAIL               # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=finn.hambly@york.ac.uk # Where to send mail
 #SBATCH --ntasks=1                         # Run on a single CPU
-#SBATCH --cpus-per-task=40                  # Number of CPU cores per task
+#SBATCH --cpus-per-task=30                 # Number of CPU cores per task
 #SBATCH --mem=1gb                          # Job memory request
-#SBATCH --time=08:00:00                    # Time limit hrs:min:sec
-#SBATCH --output=job_%j.log       # Standard output and error log
+#SBATCH --time=02:00:00                    # Time limit hrs:min:sec
+#SBATCH --output=job_%j.log                # Standard output and error log
 #SBATCH --account=phys-castep-2019         # Project account
- 
+
 echo My working directory is `pwd`
 echo Running job on host:
 echo -e '\t'`hostname` at `date`
 echo $SLURM_CPUS_ON_NODE CPU cores available
 echo
- 
+
 python geom_op.py
-  
+
 echo
 echo Job completed at `date`

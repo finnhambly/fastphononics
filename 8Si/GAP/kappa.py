@@ -10,10 +10,15 @@ import quippy, quippy.descriptors
 from quippy.potential import Potential
 from phonopy import Phonopy
 from phono3py import Phono3py
+# band structure
+from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
+from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
+    write_fc3_dat, write_fc2_dat)
 from phono3py.phonon3.conductivity_LBTE import get_thermal_conductivity_LBTE
 
 # SET UP UNIT CELL
-a = 5.431
+# cell = ase.build.bulk('Si', 'diamond', 5.44)
+a = 5.431020511
 unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[(0, 0, 0),
@@ -41,12 +46,13 @@ try:
     Potential.__str__ = lambda self: '<GAP Potential>'
 finally:
     os.chdir(orig_dir)
+
+
 no_checkpoint = True
 
 # CREATE SUPERCELL
 # 2x2x2 supercell of conventional unit cell
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
-# primitive_matrix = [(a, 0, 0), (0, a, 0), (0, 0, a)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -105,26 +111,22 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-# WRITE SECOND-ORDER FORCE CONSTANTS FILE
-w = open("FORCE_CONSTANTS_2ND", 'w')
-w.write("%d %d \n" % (len(fc2), len(fc2)))
-for i, fcs in enumerate(fc2):
-    for j, fcb in enumerate(fcs):
-        w.write(" %d %d\n" % (i+1, j+1))
-        for vec in fcb:
-            w.write("%20.14f %20.14f %20.14f\n" % tuple(vec))
+phonon._set_mesh_numbers([20, 20, 20])
+print("mesh set")
+phonon.run_thermal_conductivity(
+        temperatures=range(300, 400, 100),
+        boundary_mfp=1e6,
+        is_LBTE=False,
+        write_kappa=True)
+cond_RTA = phonon.get_thermal_conductivity()
+print(cond_RTA.get_kappa())
+phonon.run_thermal_conductivity(
+        temperatures=range(300, 400, 100),
+        boundary_mfp=1e6,
+        is_LBTE=True,
+        write_kappa=True)
+cond_LBTE = phonon.get_thermal_conductivity()
+print(cond_LBTE.get_kappa())
 
-# WRITE THIRD-ORDER FORCE CONSTANTS FILE
-w = open("FORCE_CONSTANTS_3RD", 'w')
-for i in range(fc3.shape[0]):
-    for j in range(fc3.shape[1]):
-        for k in range(fc3.shape[2]):
-            tensor3 = fc3[i, j, k]
-            w.write(" %d \n" % (k+1))
-            w.write(" %d %d %d \n" % (i + 1, j + 1, k + 1))
-            for dim1 in range(tensor3.shape[0]):
-                for dim2 in range(tensor3.shape[1]):
-                    for dim3 in range(tensor3.shape[2]):
-                        w.write(" %d %d %d " % (dim1+1, dim2+1, dim3+1))
-                        w.write("%20.14f \n" % tensor3[dim1,dim2,dim3])
-            w.write("\n")
+qpoints = cond_RTA.get_qpoints()
+print(qpoints.shape)
