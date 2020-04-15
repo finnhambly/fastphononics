@@ -10,7 +10,7 @@ import quippy, quippy.descriptors
 from quippy.potential import Potential
 
 # SET UP UNIT CELL
-a = 5.4307098388671875
+a = 5.431
 npm = Atoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[
@@ -29,14 +29,18 @@ orig_dir = os.getcwd()
 model_dir = os.path.dirname(sys.argv[0])
 if model_dir != '':
     os.chdir(model_dir)
+
 if os.path.exists('gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2'):
     os.system('bunzip2 gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2')
+
 try:
     calc = Potential(init_args='Potential xml_label="GAP_2017_6_17_60_4_3_56_165"',
                                                param_filename='gp_iter6_sparse9k.xml')
     Potential.__str__ = lambda self: '<GAP Potential>'
 finally:
     os.chdir(orig_dir)
+
+
 no_checkpoint = True
 
 npm.set_calculator(calc)

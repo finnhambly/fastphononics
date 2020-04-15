@@ -10,15 +10,10 @@ import quippy, quippy.descriptors
 from quippy.potential import Potential
 from phonopy import Phonopy
 from phono3py import Phono3py
-# band structure
-from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
-from phono3py.file_IO import (write_FORCES_FC3, write_FORCES_FC2,
-    write_fc3_dat, write_fc2_dat)
 from phono3py.phonon3.conductivity_LBTE import get_thermal_conductivity_LBTE
 
 # SET UP UNIT CELL
-# cell = ase.build.bulk('Si', 'diamond', 5.44)
-a = 5.431020511
+a = 5.431
 unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[(0, 0, 0),
@@ -110,10 +105,6 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-
-# write_FORCES_FC2(disp_dataset, forces_fc2=None, fp=None, filename="FORCES_FC2")
-# write_FORCES_FC3(disp_dataset, forces_fc3=None, fp=None, filename="FORCES_FC3")
-
 # WRITE SECOND-ORDER FORCE CONSTANTS FILE
 w = open("FORCE_CONSTANTS_2ND", 'w')
 w.write("%d %d \n" % (len(fc2), len(fc2)))
@@ -137,22 +128,3 @@ for i in range(fc3.shape[0]):
                         w.write(" %d %d %d " % (dim1+1, dim2+1, dim3+1))
                         w.write("%20.14f \n" % tensor3[dim1,dim2,dim3])
             w.write("\n")
-phonon._set_mesh_numbers([20, 20, 20])
-print("mesh set")
-phonon.run_thermal_conductivity(
-        temperatures=range(300, 400, 100),
-        boundary_mfp=1e6,
-        is_LBTE=False,
-        write_kappa=True)
-cond_RTA = phonon.get_thermal_conductivity()
-print(cond_RTA.get_kappa())
-phonon.run_thermal_conductivity(
-        temperatures=range(300, 400, 100),
-        boundary_mfp=1e6,
-        is_LBTE=True,
-        write_kappa=True)
-cond_LBTE = phonon.get_thermal_conductivity()
-print(cond_LBTE.get_kappa())
-
-qpoints = cond_RTA.get_qpoints()
-print(qpoints.shape)
