@@ -20,15 +20,15 @@ from phono3py.phonon3.conductivity_LBTE import get_thermal_conductivity_LBTE
 # cell = ase.build.bulk('Si', 'diamond', 5.44)
 a = 5.431020511
 unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
-                    cell=np.diag((a, a, a)),
-                    scaled_positions=[(0, 0, 0),
-                                      (0, 0.5, 0.5),
-                                      (0.5, 0, 0.5),
-                                      (0.5, 0.5, 0),
-                                      (0.25, 0.25, 0.25),
-                                      (0.25, 0.75, 0.75),
-                                      (0.75, 0.25, 0.75),
-                                      (0.75, 0.75, 0.25)])
+                                cell=np.diag((a, a, a)),
+                                scaled_positions=[(0, 0, 0),
+                                  (0, 0.5, 0.5),
+                                  (0.5, 0, 0.5),
+                                  (0.5, 0.5, 0),
+                                  (0.25, 0.25, 0.25),
+                                  (0.25, 0.75, 0.75),
+                                  (0.75, 0.25, 0.75),
+                                  (0.75, 0.75, 0.25)])
 
 # SET UP CALCULATOR
 # Gaussian Approximation Potentials (GAP)
