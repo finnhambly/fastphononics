@@ -11,7 +11,7 @@ from quippy.potential import Potential
 
 # SET UP UNIT CELL
 a = 5.431
-unitcell =Atoms(symbols=(['Si'] * 128),
+npm = Atoms(symbols=(['Si'] * 128),
                     cell=np.diag((a, a, a)),
                     scaled_positions=[
                     (0.0000,  0.0000,  5.4309),
