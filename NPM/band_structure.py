@@ -146,10 +146,10 @@ phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS
-# print("[Phonopy] Atomic displacements:")
+print("[Phonopy] Atomic displacements:")
 disps = phonon.get_displacements()
-# for d in disps:
-    # print("[Phonopy] %d %s" % (d[0], d[1:]))
+for d in disps:
+    print("[Phonopy] %d %s" % (d[0], d[1:]))
 
 # CALCULATE FORCES
 supercells = phonon.get_supercells_with_displacements()
@@ -162,7 +162,7 @@ for scell in supercells:
     cell.set_calculator(calc)
     forces = cell.get_forces()
     drift_force = forces.sum(axis=0)
-    # print(("[Phonopy] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
+    print(("[Phonopy] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
     # Simple translational invariance
     for force in forces:
         force -= drift_force / forces.shape[0]
@@ -170,18 +170,18 @@ for scell in supercells:
 
 # PRODUCE FORCE CONSTANTS
 phonon.produce_force_constants(forces=set_of_forces)
-# print('')
-# print("[Phonopy] Phonon frequencies at Gamma:")
-# for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
-    # print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
+print('')
+print("[Phonopy] Phonon frequencies at Gamma:")
+for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
+    print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
 
 # DOS
-phonon.set_mesh([21, 21, 21])
+phonon.set_mesh([12, 12, 12])
 phonon.set_total_DOS(tetrahedron_method=True)
-# print('')
-# print("[Phonopy] Phonon DOS:")
-# for omega, dos in np.array(phonon.get_total_DOS()).T:
-    # print("%15.7f%15.7f" % (omega, dos))
+print('')
+print("[Phonopy] Phonon DOS:")
+for omega, dos in np.array(phonon.get_total_DOS()).T:
+    print("%15.7f%15.7f" % (omega, dos))
 
 # PLOT BAND STRUCTURE
 path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],

@@ -340,7 +340,7 @@ unitcell = PhonopyAtoms(['Si'] * 288,
                     (5.25/ax, 5.25/ay, 0.25/az),
                     (5.25/ax, 5.75/ay, 0.75/az),
                     (5.75/ax, 5.25/ay, 0.75/az),
-                    (5.75/ax, 5.75/ay, 0.25/az),
+                    (5.75/ax, 5.75/ay, 0.25/az)])
 
 
 # SET UP CALCULATOR
