@@ -14,7 +14,7 @@ a = 5.431
 ax = 6
 ay = 6
 az = 1
-unitcell = PhonopyAtoms(['Si'] * 288,
+unitcell =Atoms(['Si'] * 288,
                     cell=np.diag((ax*a, ay*a, az*a)),
                     scaled_positions=[
                     #1,1,1
