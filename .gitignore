@@ -12,3 +12,6 @@ job*
 BTE*
 castep2shengbte
 results
+*.traj
+*.png
+*.pckl

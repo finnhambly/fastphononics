@@ -13,6 +13,7 @@ from quippy.potential import Potential
 a = 5.431
 npm = Atoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
+                    pbc=[1, 1, 1],
                     scaled_positions=[
                       (0, 0, 0),
                       (0, 0.5, 0.5),

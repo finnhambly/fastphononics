@@ -16,6 +16,7 @@ ay = 6
 az = 1
 unitcell =Atoms(['Si'] * 288,
                     cell=np.diag((ax*a, ay*a, az*a)),
+                    pbc=[1, 1, 1],
                     scaled_positions=[
                     #1,1,1
                     (0/ax   , 0/ay   , 0/az   ),

@@ -19,6 +19,7 @@ ay = 3
 az = 2
 npm = Atoms(symbols=(['Si'] * 80),
                     cell=np.diag((ax*a, ay*a, az*a)),
+                    pbc=[1, 1, 1],
                     scaled_positions=[
                     #1,1,1
                     (0/ax   , 0/ay   , 0/az   ),
