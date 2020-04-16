@@ -1,15 +1,3 @@
-import os
-import sys
-import builtins
-import numpy as np
-import ase, ase.build
-from ase.visualize import view
-from ase import Atoms
-from ase.optimize import LBFGS
-import quippy, quippy.descriptors
-from quippy.potential import Potential
-
-# SET UP UNIT CELL
 a = 5.431
 ax = 6
 ay = 6
@@ -341,32 +329,3 @@ unitcell = PhonopyAtoms(['Si'] * 288,
                     (5.25/ax, 5.75/ay, 0.75/az),
                     (5.75/ax, 5.25/ay, 0.75/az),
                     (5.75/ax, 5.75/ay, 0.25/az),
-
-
-# SET UP CALCULATOR
-# Gaussian Approximation Potentials (GAP)
-orig_dir = os.getcwd()
-model_dir = os.path.dirname(sys.argv[0])
-if model_dir != '':
-    os.chdir(model_dir)
-
-if os.path.exists('gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2'):
-    os.system('bunzip2 gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2')
-
-try:
-    calc = Potential(init_args='Potential xml_label="GAP_2017_6_17_60_4_3_56_165"',
-                                               param_filename='gp_iter6_sparse9k.xml')
-    Potential.__str__ = lambda self: '<GAP Potential>'
-finally:
-    os.chdir(orig_dir)
-
-
-no_checkpoint = True
-
-npm.set_calculator(calc)
-
-dyn = LBFGS(atoms=npm, trajectory='661.traj', restart='661.pckl')
-dyn.run(fmax=0.05)
-view(npm)
-
-print(npm.get_scaled_positions())

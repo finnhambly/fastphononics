@@ -133,15 +133,15 @@ no_checkpoint = True
 
 npm.set_calculator(calc)
 
-dyn = LBFGS(atoms=npm, trajectory='npm.traj', restart='npm.pckl')
-dyn.run(fmax=0.05, steps=200)
+dyn = LBFGS(atoms=npm, trajectory='331+111.traj', restart='331+111.pckl')
+dyn.run(fmax=0.05, steps=10)
 
 # Phonopy calculation
-unitcell = PhonopyAtoms(symbols=(['Si'] * 128),
+unitcell = PhonopyAtoms(symbols=(['Si'] * 80),
                     cell=np.diag((a, a, a)),
                     scaled_positions=npm.get_scaled_positions())
 # CREATE SUPERCELL
-smat = [(3, 0, 0), (0, 1, 0), (0, 0, 1)]
+smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
