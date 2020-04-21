@@ -113,6 +113,25 @@ unitcell = PhonopyAtoms(['Si'] * 96,
                       (9.37500080e-01, 7.50000191e-01, 6.50419090e-01),
                       (8.75000022e-01, 5.00000106e-01, 6.00238557e-01)])
 
+# SET UP CALCULATOR
+# Gaussian Approximation Potentials (GAP)
+orig_dir = os.getcwd()
+model_dir = os.path.dirname(sys.argv[0])
+if model_dir != '':
+    os.chdir(model_dir)
+
+if os.path.exists('gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2'):
+    os.system('bunzip2 gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz2')
+
+try:
+    calc = Potential(init_args='Potential xml_label="GAP_2017_6_17_60_4_3_56_165"',
+                                               param_filename='gp_iter6_sparse9k.xml')
+    Potential.__str__ = lambda self: '<GAP Potential>'
+finally:
+    os.chdir(orig_dir)
+
+no_checkpoint = True
+
 # CREATE SUPERCELL
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')

@@ -263,8 +263,6 @@ finally:
 
 no_checkpoint = True
 
-unitcell.set_calculator(calc)
-
 # CREATE SUPERCELL
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')

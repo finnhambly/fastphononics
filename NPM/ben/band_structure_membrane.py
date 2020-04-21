@@ -116,7 +116,6 @@ unitcell = PhonopyAtoms(['Si'] * 96,
 
 # SET UP CALCULATOR
 # Gaussian Approximation Potentials (GAP)
-# Do I need this here?
 orig_dir = os.getcwd()
 model_dir = os.path.dirname(sys.argv[0])
 if model_dir != '':
@@ -134,8 +133,6 @@ finally:
 
 
 no_checkpoint = True
-
-unitcell.set_calculator(calc)
 
 # CREATE SUPERCELL
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
