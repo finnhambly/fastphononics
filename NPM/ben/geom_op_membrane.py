@@ -13,7 +13,7 @@ from quippy.potential import Potential
 a = 5.431
 npm = Atoms(symbols=(['Si'] * 96),
                     cell=np.diag((4*a, a, 5*a)),
-                    pbc=[1, 1, 1],
+                    pbc=[1, 1, 0],
                     scaled_positions=[
                     (0.0000,    0.00,    0.199999),
                     (0.0000,    0.50,    0.299999),
@@ -135,7 +135,7 @@ no_checkpoint = True
 
 npm.set_calculator(calc)
 
-dyn = LBFGS(atoms=npm, trajectory='pillar.traj', restart='pillar.pckl')
+dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
 dyn.run(fmax=0.05)
 view(npm)
 
