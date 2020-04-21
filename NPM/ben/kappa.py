@@ -14,6 +14,7 @@ from phono3py import Phono3py
 a = 5.431
 unitcell = PhonopyAtoms(['Si'] * 96,
                     cell=np.diag((4*a, a, 5*a)),
+                    pbc=[1, 1, 0],
                     scaled_positions=[
                      (0.08274653,  0.10445219,  0.18868194),
                      (0.04976774,  0.61702697,  0.26562129),
