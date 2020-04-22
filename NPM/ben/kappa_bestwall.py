@@ -256,6 +256,8 @@ try:
     Potential.__str__ = lambda self: '<GAP Potential>'
 finally:
     os.chdir(orig_dir)
+
+    
 no_checkpoint = True
 
 # CREATE SUPERCELL
