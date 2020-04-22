@@ -271,8 +271,8 @@ view(npm)
 
 print(npm.get_scaled_positions())
 
-unitcell = PhonopyAtoms(['Si'] * 96,
-                    cell=np.diag((4*a, a, 5*a)),
+unitcell = PhonopyAtoms(['Si'] * 223,
+                    cell=np.diag((4*a, a, 13*a)),
                     scaled_positions=npm.get_scaled_positions())
 
 
