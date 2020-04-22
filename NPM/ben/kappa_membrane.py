@@ -130,10 +130,11 @@ try:
 finally:
     os.chdir(orig_dir)
 
+
 no_checkpoint = True
 
 # CREATE SUPERCELL
-smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
+smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -192,7 +193,7 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-phonon._set_mesh_numbers([20, 20, 20])
+phonon._set_mesh_numbers([12, 12, 12])
 print("mesh set")
 phonon.run_thermal_conductivity(
         temperatures=range(300, 400, 100),
