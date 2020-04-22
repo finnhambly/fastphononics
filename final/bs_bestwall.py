@@ -265,7 +265,7 @@ no_checkpoint = True
 
 npm.set_calculator(calc)
 
-dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
+dyn = LBFGS(atoms=npm, trajectory='bestwall.traj', restart='bestwall.pckl')
 dyn.run(fmax=0.02)
 view(npm)
 
