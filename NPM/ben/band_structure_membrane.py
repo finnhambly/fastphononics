@@ -135,7 +135,7 @@ finally:
 no_checkpoint = True
 
 # CREATE SUPERCELL
-smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
+smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
