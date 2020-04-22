@@ -139,7 +139,7 @@ no_checkpoint = True
 npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
-dyn.run(fmax=0.05)
+dyn.run(fmax=0.02)
 view(npm)
 
 print(npm.get_scaled_positions())
