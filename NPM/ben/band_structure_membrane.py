@@ -168,6 +168,7 @@ print('')
 print("[Phonopy] Phonon frequencies at Gamma:")
 for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
     print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
+phonon.save(filename="phonopy_params_membrane.yaml", settings={'force_constants': True, 'create_displacements': True})
 
 # DOS
 phonon.set_mesh([12, 12, 12])
@@ -181,7 +182,6 @@ for omega, dos in np.array(phonon.get_total_DOS()).T:
 path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],
         [0.5, 0.25, 0.75], [0.5, 0.5, 0.5], [0, 0, 0], [0.375, 0.375, 0.75],
         [0.5, 0.25, 0.75], [0.625, 0.25, 0.625], [0.5, 0, 0.5]]]
-phonon.save(filename="phonopy_params_membrane.yaml", settings={'force_constants': True, 'create_displacements': True})
 labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)

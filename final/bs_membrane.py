@@ -191,11 +191,13 @@ print("[Phonopy] Phonon DOS:")
 for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
+phonon.save(filename="phonopy_params_membrane.yaml",
+settings={'force_constants': True, 'create_displacements': True})
+
 # PLOT BAND STRUCTURE
 path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],
         [0.5, 0.25, 0.75], [0.5, 0.5, 0.5], [0, 0, 0], [0.375, 0.375, 0.75],
         [0.5, 0.25, 0.75], [0.625, 0.25, 0.625], [0.5, 0, 0.5]]]
-phonon.save(filename="phonopy_params_membrane.yaml", settings={'force_constants': True, 'create_displacements': True})
 labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)

@@ -3,18 +3,18 @@ import sys
 import builtins
 import numpy as np
 import ase, ase.build
+from ase.visualize import view
 from ase import Atoms
+from phonopy import Phonopy
 from phonopy.structure.atoms import PhonopyAtoms
 from ase.optimize import LBFGS
 import quippy, quippy.descriptors
 from quippy.potential import Potential
-from phonopy import Phonopy
 from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
 
 # SET UP UNIT CELL
-# cell = ase.build.bulk('Si', 'diamond', 5.44)
 a = 5.431
-unitcell = PhonopyAtoms(['Si'] * 127,
+npm = Atoms(symbols=(['Si'] * 127),
                     cell=np.diag((4*a, a, 7*a)),
                     pbc=[1, 1, 0],
                     scaled_positions=[
@@ -146,9 +146,9 @@ unitcell = PhonopyAtoms(['Si'] * 127,
                      (0.69047409, 0.81824145, 0.7390754 ),
                      (0.62903258, 0.50104382, 0.71311762)])
 
+
 # SET UP CALCULATOR
 # Gaussian Approximation Potentials (GAP)
-# Do I need this here?
 orig_dir = os.getcwd()
 model_dir = os.path.dirname(sys.argv[0])
 if model_dir != '':
@@ -167,7 +167,19 @@ finally:
 
 no_checkpoint = True
 
-# CREATE SUPERCELL
+npm.set_calculator(calc)
+
+dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
+dyn.run(fmax=0.02)
+view(npm)
+
+print(npm.get_scaled_positions())
+
+unitcell = PhonopyAtoms(['Si'] * 96,
+                    cell=np.diag((4*a, a, 5*a)),
+                    scaled_positions=npm.get_scaled_positions())
+
+
 smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
@@ -210,11 +222,13 @@ print("[Phonopy] Phonon DOS:")
 for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
+phonon.save(filename="phonopy_params_membrane.yaml",
+settings={'force_constants': True, 'create_displacements': True})
+
 # PLOT BAND STRUCTURE
 path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],
         [0.5, 0.25, 0.75], [0.5, 0.5, 0.5], [0, 0, 0], [0.375, 0.375, 0.75],
         [0.5, 0.25, 0.75], [0.625, 0.25, 0.625], [0.5, 0, 0.5]]]
-phonon.save(filename="phonopy_params_avwall.yaml", settings={'force_constants': True, 'create_displacements': True})
 labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
