@@ -4,6 +4,8 @@ import builtins
 import numpy as np
 import ase, ase.build
 from ase import Atoms
+from ase.visualize import view
+from ase.optimize import LBFGS
 from phonopy.structure.atoms import PhonopyAtoms
 import quippy, quippy.descriptors
 from quippy.potential import Potential
