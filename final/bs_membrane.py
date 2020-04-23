@@ -152,7 +152,7 @@ unitcell = PhonopyAtoms(['Si'] * 96,
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
-
+phonon.save(filename="phonopy_params_membrane.yaml")
 # CALCULATE DISPLACEMENTS
 print("[Phonopy] Atomic displacements:")
 disps = phonon.get_displacements()

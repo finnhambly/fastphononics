@@ -154,9 +154,11 @@ phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS
-print("[Phonopy] Calculating atomic displacements")
+print("[Phono3py] Calculating atomic displacements")
 disp_dataset = phonon.get_displacement_dataset()
 scells_with_disps = phonon.get_supercells_with_displacements()
+
+phonon.save(filename="phono3py_params_membrane.yaml")
 
 # CALCULATE DISTANCES
 # count = 0
@@ -197,7 +199,7 @@ for scell in scells_with_disps:
     cell.set_calculator(calc)
     forces = cell.get_forces()
     drift_force = forces.sum(axis=0)
-    print(("[Phonopy] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
+    print(("[Phono3py] Drift force:" + "%11.5f" * 3) % tuple(drift_force))
     # Simple translational invariance
     for force in forces:
         force -= drift_force / forces.shape[0]
@@ -205,25 +207,44 @@ for scell in scells_with_disps:
 
 # PRODUCE FORCE CONSTANTS
 phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
+phonon.save(filename="phono3py_params_membrane.yaml",
+settings={'force_constants': True})
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
+print('[Phono3py] Setting mesh numbers')
 phonon._set_mesh_numbers([12, 12, 12])
-print("mesh set")
 phonon.run_thermal_conductivity(
         temperatures=range(300, 400, 100),
         boundary_mfp=1e6,
         is_LBTE=False,
         write_kappa=True)
 cond_RTA = phonon.get_thermal_conductivity()
+print('')
+print('[Phono3py] Thermal conductivity (RTA):')
 print(cond_RTA.get_kappa())
+print('[Phono3py] Heat capacity (RTA):')
+print(cond_RTA.get_mode_heat_capacities())
+print('[Phono3py] Q points (RTA):')
+qpoints = cond_RTA.get_qpoints()
+print(qpoints.shape)
+
 phonon.run_thermal_conductivity(
         temperatures=range(300, 400, 100),
         boundary_mfp=1e6,
         is_LBTE=True,
         write_kappa=True)
 cond_LBTE = phonon.get_thermal_conductivity()
+print('')
+print('[Phono3py] Thermal conductivity (LBTE):')
 print(cond_LBTE.get_kappa())
-
-qpoints = cond_RTA.get_qpoints()
+print('[Phono3py] Heat capacity (LBTE):')
+print(cond_LBTE.get_mode_heat_capacities())
+print('[Phono3py] Q points (LBTE):')
+qpoints = cond_LBTE.get_qpoints()
 print(qpoints.shape)
+print('[Phono3py] Thermal conductivity (LBTE: RTA):')
+print(cond_LBTE.get_kappa_RTA())
+
+phonon.save(filename="phono3py_params_membrane.yaml",
+settings={'force_constants': True})
