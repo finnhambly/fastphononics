@@ -180,7 +180,7 @@ unitcell = PhonopyAtoms(['Si'] * 127,
                     scaled_positions=npm.get_scaled_positions())
 
 
-smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -234,4 +234,4 @@ qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 phonon.plot_band_structure_and_dos().show()
 
-phonon.write_animation([8,8,8], anime_type='v_sim')
+phonon.write_animation([8,8,8], anime_type='v_sim',filename='anime_avwall.ascii')

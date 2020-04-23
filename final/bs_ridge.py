@@ -178,7 +178,7 @@ no_checkpoint = True
 npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='ridge.traj', restart='ridge.pckl')
-dyn.run(fmax=0.02)
+dyn.run(fmax=0.05)
 view(npm)
 
 print(npm.get_scaled_positions())
@@ -242,4 +242,4 @@ qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 phonon.plot_band_structure_and_dos().show()
 
-phonon.write_animation([8,8,8], anime_type='v_sim')
+phonon.write_animation([8,8,8], anime_type='v_sim',filename='anime_ridge.ascii')
