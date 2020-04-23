@@ -279,7 +279,7 @@ unitcell = PhonopyAtoms(['Si'] * 223,
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
-phonon.save(filename="phonopy_params_membrane.yaml")
+phonon.save(filename="phonopy_params_bestwall.yaml")
 
 # CALCULATE DISPLACEMENTS
 print("[Phonopy] Atomic displacements:")
@@ -319,7 +319,7 @@ print("[Phonopy] Phonon DOS:")
 for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
-phonon.save(filename="phonopy_params_membrane.yaml",
+phonon.save(filename="phonopy_params_bestwall.yaml",
 settings={'force_constants': True, 'create_displacements': True})
 
 # PLOT BAND STRUCTURE
