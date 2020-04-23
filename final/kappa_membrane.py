@@ -140,7 +140,6 @@ npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
 dyn.run(fmax=0.05)
-view(npm)
 
 print(npm.get_scaled_positions())
 
@@ -149,9 +148,9 @@ unitcell = PhonopyAtoms(['Si'] * 96,
                     scaled_positions=npm.get_scaled_positions())
 
 # CREATE SUPERCELL
-smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
-phonon.generate_displacements(distance=0.03)
+phonon.generate_displacements(distance=0.1)
 
 # CALCULATE DISPLACEMENTS
 print("[Phono3py] Calculating atomic displacements")
