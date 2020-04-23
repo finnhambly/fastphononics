@@ -128,7 +128,7 @@ if os.path.exists('gp_iter6_sparse9k.xml.sparseX.GAP_2017_6_17_60_4_3_56_1651.bz
 
 try:
     calc = Potential(init_args='Potential xml_label="GAP_2017_6_17_60_4_3_56_165"',
-                                               param_filename='gp_iter6_sparse9k.xml')
+        param_filename='gp_iter6_sparse9k.xml')
     Potential.__str__ = lambda self: '<GAP Potential>'
 finally:
     os.chdir(orig_dir)
@@ -150,7 +150,7 @@ unitcell = PhonopyAtoms(['Si'] * 96,
 # CREATE SUPERCELL
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
-phonon.generate_displacements(distance=0.1)
+phonon.generate_displacements(distance=0.03, cutoff_pair_distance=4.0)
 
 # CALCULATE DISPLACEMENTS
 print("[Phono3py] Calculating atomic displacements")
