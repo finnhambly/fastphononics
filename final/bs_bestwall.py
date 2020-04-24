@@ -267,7 +267,6 @@ npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm, trajectory='bestwall.traj', restart='bestwall.pckl')
 dyn.run(fmax=0.05)
-view(npm)
 
 print(npm.get_scaled_positions())
 
