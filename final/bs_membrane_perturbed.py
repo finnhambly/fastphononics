@@ -18,14 +18,14 @@ npm = Atoms(symbols=(['Si'] * 96),
                     cell=np.diag((4*a, a, 5*a)),
                     pbc=[1, 1, 0],
                     scaled_positions=[
-                    (0.0000,    0.00,    0.199999),
+                    (0.0000,    0.01,    0.199999),
                     (0.0000,    0.50,    0.299999),
                     (0.0625,    0.25,    0.249999),
                     (0.1250,    0.00,    0.299999),
                     (0.0625,    0.75,    0.349999),
                     (0.1875,    0.25,    0.349999),
                     (0.1875,    0.75,    0.249999),
-                    (0.1250,    0.50,    0.199999),
+                    (0.1251,    0.49,    0.120999),
                     (0.2500,    0.00,    0.199999),
                     (0.2500,    0.50,    0.299999),
                     (0.3125,    0.25,    0.249999),
@@ -33,7 +33,7 @@ npm = Atoms(symbols=(['Si'] * 96),
                     (0.3125,    0.75,    0.349999),
                     (0.4375,    0.25,    0.349999),
                     (0.4375,    0.75,    0.249999),
-                    (0.3750,    0.50,    0.199999),
+                    (0.3749,    0.499,    0.198999),
                     (0.5000,    0.00,    0.199999),
                     (0.5000,    0.50,    0.299999),
                     (0.5625,    0.25,    0.249999),
@@ -48,7 +48,7 @@ npm = Atoms(symbols=(['Si'] * 96),
                     (0.8750,    0.00,    0.299999),
                     (0.8125,    0.75,    0.349999),
                     (0.9375,    0.25,    0.349999),
-                    (0.9375,    0.75,    0.249999),
+                    (0.9376,    0.749,   0.250999),
                     (0.8750,    0.50,    0.199999),
                     (0.0000,    0.00,    0.399999),
                     (0.0000,    0.50,    0.500000),
@@ -86,22 +86,22 @@ npm = Atoms(symbols=(['Si'] * 96),
                     (0.0000,    0.50,    0.700000),
                     (0.0625,    0.25,    0.650000),
                     (0.1250,    0.00,    0.700000),
-                    (0.0625,    0.75,    0.750000),
+                    (0.0630,    0.748,   0.752000),
                     (0.1875,    0.25,    0.750000),
                     (0.1875,    0.75,    0.650000),
                     (0.1250,    0.50,    0.600000),
                     (0.2500,    0.00,    0.600000),
                     (0.2500,    0.50,    0.700000),
                     (0.3125,    0.25,    0.650000),
-                    (0.3750,    0.00,    0.700000),
-                    (0.3125,    0.75,    0.750000),
+                    (0.3749,    0.01,    0.690000),
+                    (0.3128,    0.76,    0.751000),
                     (0.4375,    0.25,    0.750000),
                     (0.4375,    0.75,    0.650000),
                     (0.3750,    0.50,    0.600000),
                     (0.5000,    0.00,    0.600000),
                     (0.5000,    0.50,    0.700000),
                     (0.5625,    0.25,    0.650000),
-                    (0.6250,    0.00,    0.700000),
+                    (0.6260,    0.00,    0.699000),
                     (0.5625,    0.75,    0.750000),
                     (0.6875,    0.25,    0.750000),
                     (0.6875,    0.75,    0.650000),
@@ -138,7 +138,7 @@ no_checkpoint = True
 
 npm.set_calculator(calc)
 
-dyn = LBFGS(atoms=npm, trajectory='membrane.traj', restart='membrane.pckl')
+dyn = LBFGS(atoms=npm, trajectory='membrane_p.traj', restart='membrane_p.pckl')
 dyn.run(fmax=0.05)
 view(npm)
 
@@ -152,7 +152,7 @@ unitcell = PhonopyAtoms(['Si'] * 96,
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
-phonon.save(filename="phonopy_params_membrane.yaml")
+phonon.save(filename="phonopy_params_membrane_p.yaml")
 # CALCULATE DISPLACEMENTS
 print("[Phonopy] Atomic displacements:")
 disps = phonon.get_displacements()
@@ -191,15 +191,14 @@ print("[Phonopy] Phonon DOS:")
 for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
-phonon.save(filename="phonopy_params_membrane.yaml",
+phonon.save(filename="phonopy_params_membrane_p.yaml",
 settings={'force_constants': True, 'create_displacements': True})
 
 # PLOT BAND STRUCTURE
 path = [[[0, 0, 0], [0, 0.5, 0], [0.5, 0.5, 0], [0, 0, 0]]]
-labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
 
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
+phonon.run_band_structure(qpoints, path_connections=connections)
 phonon.plot_band_structure_and_dos().show()
 
-phonon.write_animation([8,8,8], anime_type='v_sim', filename='anime_membrane.ascii')
+phonon.write_animation([8,8,8], anime_type='v_sim', filename='anime_membrane_p.ascii')
