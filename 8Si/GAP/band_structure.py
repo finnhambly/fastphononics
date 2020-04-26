@@ -57,7 +57,7 @@ unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=npm.get_scaled_positions())
 # CREATE SUPERCELL
-smat = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -91,6 +91,8 @@ print("[Phonopy] Phonon frequencies at Gamma:")
 for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
     print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
 
+phonon.save(settings={'force_constants': True, 'create_displacements': True})
+
 # DOS
 phonon.set_mesh([12, 12, 12])
 phonon.set_total_DOS(tetrahedron_method=True)
@@ -100,11 +102,7 @@ for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
 # PLOT BAND STRUCTURE
-path = [[[0.5, 0.25, 0.75], [0, 0, 0], [0.5, 0, 0.5],
-        [0.5, 0.25, 0.75], [0.5, 0.5, 0.5], [0, 0, 0], [0.375, 0.375, 0.75],
-        [0.5, 0.25, 0.75], [0.625, 0.25, 0.625], [0.5, 0, 0.5]]]
-phonon.save(settings={'force_constants': True, 'create_displacements': True})
-labels = ["$\\Gamma$", "X", "U", "K", "$\\Gamma$", "L", "W"]
+path = [[[0, 0, 0], [0, 0.5, 0], [0.5, 0.5, 0], [0, 0, 0]]]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
+phonon.run_band_structure(qpoints, path_connections=connections)
 phonon.plot_band_structure_and_dos().show()
