@@ -47,9 +47,18 @@ finally:
 
 no_checkpoint = True
 
+# sw_pot = Potential('IP SW', param_str="""<SW_params n_types="3"
+#     label="PRB_31_plus_H_Ge"><per_type_data type="1" atomic_num="14" />
+#     <per_pair_data atnum_i="14" atnum_j="14" AA="7.049556277" BB="0.6022245584"
+#     p="4" q="0" a="1.80" sigma="2.0951" eps="2.1675" />
+#     <per_triplet_data atnum_c="14" atnum_j="14" atnum_k="14" lambda="21.0"
+#     gamma="1.20" eps="2.1675" />
+#     </SW_params>""") #from https://libatoms.github.io/GAP/quippy-potential-tutorial.html
+# calc = sw_pot
+
 npm.set_calculator(calc)
 
-dyn = LBFGS(atoms=npm, trajectory='8.traj',restart='8.pckl')
+dyn = LBFGS(atoms=npm, trajectory='8GAP.traj',restart='8GAP.pckl')
 dyn.run(fmax=0.05)
 
 # Phonopy calculation
@@ -102,7 +111,11 @@ for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
 # PLOT BAND STRUCTURE
-path = [[[0, 0, 0], [0, 0.5, 0], [0.5, 0.5, 0], [0, 0, 0]]]
+path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
+labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections)
+phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 phonon.plot_band_structure_and_dos().show()
+# import code
+# code.interact(local=locals())
+phonon.write_animation([8,8,8], anime_type='v_sim',filename='anime_bulk_gap.ascii')
