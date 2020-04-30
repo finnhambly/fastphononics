@@ -16,3 +16,5 @@ results
 *.png
 *.pckl
 ascii-phonons-master
+*.ascii
+*.conf
