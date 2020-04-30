@@ -66,7 +66,7 @@ unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     scaled_positions=npm.get_scaled_positions())
 # CREATE SUPERCELL
-smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
+smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -111,11 +111,30 @@ for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
 # PLOT BAND STRUCTURE
-path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
-labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
-qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
-phonon.plot_band_structure_and_dos().show()
+# path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
+# labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
+# qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
+# phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
+# phonon.plot_band_structure_and_dos().show()
 # import code
 # code.interact(local=locals())
-phonon.write_animation([8,8,8], anime_type='v_sim',filename='anime_bulk_gap.ascii')
+# phonon.write_animation([8,8,8], anime_type='v_sim',filename='anime_bulk_gap.ascii')
+
+# Thermal properties
+print('Number of Q points is:')
+mesh_dict = phonon.get_mesh_dict()
+qpoints = mesh_dict['qpoints']
+print(qpoints.shape)
+phonon.run_thermal_properties(t_step=10,
+                              t_max=1000,
+                              t_min=0)
+tp_dict = phonon.get_thermal_properties_dict()
+temperatures = tp_dict['temperatures']
+free_energy = tp_dict['free_energy']
+entropy = tp_dict['entropy']
+heat_capacity = tp_dict['heat_capacity']
+
+for t, F, S, cv in zip(temperatures, free_energy, entropy, heat_capacity):
+    print(("%12.3f " + "%15.7f" * 3) % ( t, F, S, cv ))
+
+phonon.plot_thermal_properties().show()
