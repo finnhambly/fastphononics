@@ -14,7 +14,7 @@ from phono3py import Phono3py
 
 # SET UP UNIT CELL
 a = 5.431
-unitcell = PhonopyAtoms(symbols=(['Si'] * 8),
+npm = Atoms(symbols=(['Si'] * 8),
                     cell=np.diag((a, a, a)),
                     pbc=[1, 1, 1],
                     scaled_positions=[
@@ -48,10 +48,21 @@ finally:
 
 no_checkpoint = True
 
+npm.set_calculator(calc)
+
+dyn = LBFGS(atoms=npm)#, trajectory='8GAP.traj', restart='8GAP.pckl')
+dyn.run(fmax=0.05)
+
+print(npm.get_scaled_positions())
+
+unitcell = PhonopyAtoms(['Si'] * 8,
+                    cell=np.diag((a, a, a)),
+                    scaled_positions=npm.get_scaled_positions())
+
 # CREATE SUPERCELL
 smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
-phonon.generate_displacements(distance=0.03, cutoff_pair_distance=4.0)
+phonon.generate_displacements(distance=0.03)
 
 # CALCULATE DISPLACEMENTS
 print("[Phono3py] Calculating atomic displacements")
