@@ -48,6 +48,15 @@ finally:
 
 no_checkpoint = True
 
+# sw_pot = Potential('IP SW', param_str="""<SW_params n_types="3"
+#     label="PRB_31_plus_H_Ge"><per_type_data type="1" atomic_num="14" />
+#     <per_pair_data atnum_i="14" atnum_j="14" AA="7.049556277" BB="0.6022245584"
+#     p="4" q="0" a="1.80" sigma="2.0951" eps="2.1675" />
+#     <per_triplet_data atnum_c="14" atnum_j="14" atnum_k="14" lambda="21.0"
+#     gamma="1.20" eps="2.1675" />
+#     </SW_params>""") #from https://libatoms.github.io/GAP/quippy-potential-tutorial.html
+# calc = sw_pot
+
 npm.set_calculator(calc)
 
 dyn = LBFGS(atoms=npm)#, trajectory='8GAP.traj', restart='8GAP.pckl')
@@ -119,34 +128,20 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-print('[Phono3py] Setting mesh numbers: 12 12 12')
-phonon._set_mesh_numbers([12, 12, 12])
+print('[Phono3py] Setting mesh numbers: 14 14 14')
+phonon._set_mesh_numbers([14, 14, 14])
 phonon.run_thermal_conductivity(
-        temperatures=range(300, 400, 100),
-        boundary_mfp=1e6,
-        is_LBTE=False,
-        write_kappa=True)
-cond_RTA = phonon.get_thermal_conductivity()
-print('300K')
-print('[Phono3py] Thermal conductivity (RTA):')
-print(cond_RTA.get_kappa())
-print('[Phono3py] Heat capacity (RTA):')
-print(cond_RTA.get_mode_heat_capacities())
-print('[Phono3py] Q points (RTA):')
-qpoints = cond_RTA.get_qpoints()
-print(qpoints.shape)
-
-phonon.run_thermal_conductivity(
-        temperatures=range(300, 400, 100),
+        temperatures=range(0, 1000, 100),
         boundary_mfp=1e6,
         is_LBTE=True,
         write_kappa=True)
 cond_LBTE = phonon.get_thermal_conductivity()
 print('')
 print('[Phono3py] Thermal conductivity (LBTE):')
-print(cond_LBTE.get_kappa())
-print('[Phono3py] Heat capacity (LBTE):')
-print(cond_LBTE.get_mode_heat_capacities())
+import code
+code.interact(local=locals())
+for i in range(10):
+    print(cond_LBTE.get_kappa()[0][i][1])
 print('[Phono3py] Q points (LBTE):')
 qpoints = cond_LBTE.get_qpoints()
 print(qpoints.shape)
