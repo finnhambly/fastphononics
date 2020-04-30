@@ -18,3 +18,4 @@ results
 ascii-phonons-master
 *.ascii
 *.conf
+.log
