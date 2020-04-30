@@ -128,7 +128,7 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-print('[Phono3py] Setting mesh numbers')
+print('[Phono3py] Setting mesh numbers:')
 phonon._set_mesh_numbers([14,14,14])
 phonon.run_thermal_conductivity(
         temperatures=range(10, 100, 10),
