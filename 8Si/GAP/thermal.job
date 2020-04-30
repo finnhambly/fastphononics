@@ -4,6 +4,7 @@
 #SBATCH --mail-user=finn.hambly@york.ac.uk # Where to send mail
 #SBATCH --ntasks=1                         # Run on a single CPU
 #SBATCH --cpus-per-task=30                 # Number of CPU cores per task
+#SBATCH --partition=himem
 #SBATCH --mem=1gb                          # Job memory request
 #SBATCH --time=08:00:00                    # Time limit hrs:min:sec
 #SBATCH --output=job_%j.log                # Standard output and error log

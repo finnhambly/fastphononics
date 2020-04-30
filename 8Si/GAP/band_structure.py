@@ -103,7 +103,7 @@ for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
 phonon.save(settings={'force_constants': True, 'create_displacements': True})
 
 # DOS
-phonon.set_mesh([12, 12, 12])
+phonon.set_mesh([6,6,6])
 phonon.set_total_DOS(tetrahedron_method=True)
 print('')
 print("[Phonopy] Phonon DOS:")

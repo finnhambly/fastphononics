@@ -69,7 +69,7 @@ unitcell = PhonopyAtoms(['Si'] * 8,
                     scaled_positions=npm.get_scaled_positions())
 
 # CREATE SUPERCELL
-smat = [(3, 0, 0), (0, 3, 0), (0, 0, 3)]
+smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
 phonon = Phono3py(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
 
@@ -128,10 +128,10 @@ phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
-print('[Phono3py] Setting mesh numbers: 12 12 12')
-phonon._set_mesh_numbers([14, 14, 14])
+print('[Phono3py] Setting mesh numbers')
+phonon._set_mesh_numbers([14,14,14])
 phonon.run_thermal_conductivity(
-        temperatures=range(0, 1000, 100),
+        temperatures=range(10, 100, 10),
         boundary_mfp=1e6,
         is_LBTE=True,
         write_kappa=True)

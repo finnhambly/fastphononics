@@ -1,13 +1,13 @@
 &allocations
         nelements=1,
         natoms=8,
-        ngrid(:)=15 15 15 
+        ngrid(:)=12 12 12 
 &end
 &crystal
         lfactor=0.1,
-        lattvec(:,1)=5.431020511 0.0  0.0,
-        lattvec(:,2)=0.0  5.431020511  0.0,
-        lattvec(:,3)=0.0  0.0  5.431020511,
+        lattvec(:,1)=5.431 0.0  0.0,
+        lattvec(:,2)=0.0  5.431  0.0,
+        lattvec(:,3)=0.0  0.0  5.431,
         elements="Si"
         types=1 1 1 1 1 1 1 1,
         positions(:,1)=0.0  0.0  0.0,
@@ -21,8 +21,8 @@
         scell(:)=2 2 2
 &end
 &parameters
-	T_min=300.0
-	T_max=300.0
+	T_min=10.0
+	T_max=1000.0
 	T_step=100.0
 	scalebroad=1.0
 &end
