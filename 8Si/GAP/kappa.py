@@ -69,7 +69,7 @@ print("[Phono3py] Calculating atomic displacements")
 disp_dataset = phonon.get_displacement_dataset()
 scells_with_disps = phonon.get_supercells_with_displacements()
 
-phonon.save(filename="phono3py_params.yaml")
+phonon.save(filename="phono3py_params.yaml",settings={'force_constants': True})
 
 # CALCULATE DISTANCES
 # count = 0
