@@ -279,6 +279,11 @@ print("[Phonopy] Phonon frequencies at Gamma:")
 for i, freq in enumerate(phonon.get_frequencies((0, 0, 0))):
     print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
 
+print('')
+print("[Phonopy] Phonon frequencies at U:")
+for i, freq in enumerate(phonon.get_frequencies((0.5, 0.5, 0))):
+    print("[Phonopy] %3d: %10.5f THz" %  (i + 1, freq)) # THz
+
 # DOS
 phonon.set_mesh([12, 12, 12])
 phonon.set_total_DOS(tetrahedron_method=True)
