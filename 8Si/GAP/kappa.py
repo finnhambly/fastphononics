@@ -138,8 +138,6 @@ phonon.run_thermal_conductivity(
 cond_LBTE = phonon.get_thermal_conductivity()
 print('')
 print('[Phono3py] Thermal conductivity (LBTE):')
-import code
-code.interact(local=locals())
 for i in range(10):
     print(cond_LBTE.get_kappa()[0][i][1])
 print('[Phono3py] Q points (LBTE):')
