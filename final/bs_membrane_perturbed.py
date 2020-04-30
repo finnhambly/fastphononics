@@ -199,10 +199,10 @@ phonon.save(filename="phonopy_params_membrane_p.yaml",
 settings={'force_constants': True, 'create_displacements': True})
 
 # PLOT BAND STRUCTURE
-path = [[[0, 0, 0], [0, 0.5, 0], [0.5, 0.5, 0], [0, 0, 0]]]
-
+path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
+labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
-phonon.run_band_structure(qpoints, path_connections=connections)
+phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 phonon.plot_band_structure_and_dos().show()
 
 phonon.write_animation([8,8,8], anime_type='v_sim', filename='anime_membrane_p.ascii')
