@@ -70,33 +70,33 @@ disp_dataset = phonon.get_displacement_dataset()
 scells_with_disps = phonon.get_supercells_with_displacements()
 
 # CALCULATE DISTANCES
-# count = 0
-# for i, disp1 in enumerate(disp_dataset['first_atoms']):
-    # print("%4d: %4d                %s" % (
-        # count + 1,
-        # disp1['number'] + 1,
-        # np.around(disp1['displacement'], decimals=3)))
-    # count += 1
+count = 0
+for i, disp1 in enumerate(disp_dataset['first_atoms']):
+    print("%4d: %4d                %s" % (
+        count + 1,
+        disp1['number'] + 1,
+        np.around(disp1['displacement'], decimals=3)))
+    count += 1
 
-# distances = []
-# for i, disp1 in enumerate(disp_dataset['first_atoms']):
-#     for j, disp2 in enumerate(disp1['second_atoms']):
-#         # print("%4d: %4d-%4d (%6.3f)  %s %s" % (
-#         #     count + 1,
-#         #     disp1['number'] + 1,
-#         #     disp2['number'] + 1,
-#         #     disp2['pair_distance'],
-#         #     np.around(disp1['displacement'], decimals=3),
-#         #     np.around(disp2['displacement'], decimals=3)))
-#         distances.append(disp2['pair_distance'])
-#         count += 1
-#
-# # Find unique pair distances
-# distances = np.array(distances)
-# distances_int = (distances * 1e5).astype(int)
-# unique_distances = np.unique(distances_int) * 1e-5 # up to 5 decimals
-# print("Unique pair distances")
-# print(unique_distances)
+distances = []
+for i, disp1 in enumerate(disp_dataset['first_atoms']):
+    for j, disp2 in enumerate(disp1['second_atoms']):
+        print("%4d: %4d-%4d (%6.3f)  %s %s" % (
+            count + 1,
+            disp1['number'] + 1,
+            disp2['number'] + 1,
+            disp2['pair_distance'],
+            np.around(disp1['displacement'], decimals=3),
+            np.around(disp2['displacement'], decimals=3)))
+        distances.append(disp2['pair_distance'])
+        count += 1
+
+# Find unique pair distances
+distances = np.array(distances)
+distances_int = (distances * 1e5).astype(int)
+unique_distances = np.unique(distances_int) * 1e-5 # up to 5 decimals
+print("Unique pair distances")
+print(unique_distances)
 
 # CALCULATE FORCES
 set_of_forces = []
