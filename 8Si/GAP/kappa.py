@@ -69,7 +69,7 @@ print("[Phono3py] Calculating atomic displacements")
 disp_dataset = phonon.get_displacement_dataset()
 scells_with_disps = phonon.get_supercells_with_displacements()
 
-phonon.save(filename="phono3py_params.yaml",settings={'force_constants': True})
+phonon.save(filename="phono3py_params.yaml")
 
 # CALCULATE DISTANCES
 # count = 0
@@ -118,8 +118,7 @@ for scell in scells_with_disps:
 
 # PRODUCE FORCE CONSTANTS
 phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
-phonon.save(filename="phono3py_params.yaml",
-settings={'force_constants': True})
+phonon.save(filename="phono3py_params.yaml")
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
 
@@ -157,8 +156,7 @@ print(qpoints.shape)
 print('[Phono3py] Thermal conductivity (LBTE: RTA):')
 print(cond_LBTE.get_kappa_RTA())
 
-phonon.save(filename="phono3py_params.yaml",
-settings={'force_constants': True})
+phonon.save(filename="phono3py_params.yaml")
 
 # WRITE SECOND-ORDER FORCE CONSTANTS FILE
 w = open("FORCE_CONSTANTS_2ND", 'w')
