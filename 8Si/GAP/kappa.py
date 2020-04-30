@@ -144,8 +144,8 @@ print('[Phono3py] Q points (LBTE):')
 qpoints = cond_LBTE.get_qpoints()
 print(qpoints.shape)
 print('[Phono3py] Thermal conductivity (LBTE: RTA):')
-print(cond_LBTE.get_kappa_RTA())
-
+for i in range(10):
+    print(cond_LBTE.get_kappa_RTA()[0][i][1])
 # WRITE SECOND-ORDER FORCE CONSTANTS FILE
 w = open("FORCE_CONSTANTS_2ND", 'w')
 w.write("%d %d \n" % (len(fc2), len(fc2)))
