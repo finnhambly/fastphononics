@@ -1,7 +1,6 @@
 *.dat
 FORCES_FC*
 __pycache__
-*.yaml
 *.hdf5
 shengbte
 T300K
@@ -13,9 +12,8 @@ BTE*
 castep2shengbte
 results
 *.traj
-*.png
 *.pckl
 ascii-phonons-master
-*.ascii
 *.conf
-.log
+*.log
+*.png
