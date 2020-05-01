@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------#
-structure = thickmembrane
+structure = 'thickmembrane'
 #------------------------------------------------------------------------------#
 from quippy.potential import Potential
 from ase import Atoms

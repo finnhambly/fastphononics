@@ -21,6 +21,7 @@ from phonopy import Phonopy
 from phono3py import Phono3py
 from phono3py.cui.phono3py_yaml import Phono3pyYaml
 from phono3py.file_IO import write_fc3_dat, write_fc2_dat
+from phono3py.file_IO import parse_fc2, parse_fc3
 from phonopy.file_IO import write_FORCE_SETS
 
 # import unit cell
@@ -128,12 +129,14 @@ for scell in scells_with_disps:
     for force in forces:
         force -= drift_force / forces.shape[0]
     set_of_forces.append(forces)
-write_FORCE_SETS(disp_dataset,filename='FORCE_SETS_'+structure+mode)
 
 # PRODUCE FORCE CONSTANTS
 phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
 fc3 = phonon.get_fc3()
 fc2 = phonon.get_fc2()
+# num_atoms = len(phonon.unitcell.get_chemical_symbols())
+# fc3 = parse_fc3(num_atoms,filename='fc3'+structure+mode+'.dat')
+# fc2 = parse_fc2(num_atoms,filename='fc2'+structure+mode+'.dat')
 
 print('[Phono3py] Setting mesh numbers:')
 phonon._set_mesh_numbers([10,10,10])
@@ -169,6 +172,8 @@ with open(filename, 'w') as w:
 
 write_fc3_dat(fc3, filename='fc3'+structure+mode+'.dat')
 write_fc2_dat(fc2, filename='fc2'+structure+mode+'.dat')
+write_FORCE_SETS(disp_dataset,filename='FORCE_SETS_'+structure+mode)
+
 
 # write force constants to ShengBTE input files
 if (shengbte):
