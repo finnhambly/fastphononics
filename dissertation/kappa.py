@@ -128,7 +128,7 @@ for scell in scells_with_disps:
     for force in forces:
         force -= drift_force / forces.shape[0]
     set_of_forces.append(forces)
- write_FORCE_SETS(disp_dataset,filename='FORCE_SETS_'+structure+mode)
+write_FORCE_SETS(disp_dataset,filename='FORCE_SETS_'+structure+mode)
 
 # PRODUCE FORCE CONSTANTS
 phonon.produce_fc3(set_of_forces, displacement_dataset=disp_dataset)
