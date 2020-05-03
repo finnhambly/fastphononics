@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
-structure = 'bulk'
-mode = 'sw'
+structure = 'thickmembrane'
+mode = 'gap'
 gui = True
 latex_labels = True
 #------------------------------------------------------------------------------#
@@ -67,6 +67,11 @@ for t, F, S, cv in zip(temperatures, free_energy, entropy, heat_capacity):
 
 if (gui):
     phonon.plot_thermal_properties().show()
+    unitcell = phonon.get_unitcell()
+    npm = Atoms(unitcell.get_chemical_symbols(),
+        cell=unitcell.get_cell(),
+        scaled_positions=unitcell.get_scaled_positions())                                                                                         >>> npm = Atoms(unitcell.get_chemical_symbols(), cell=unitcell.get_cell(), scaled_positions=unitcell.get_scaled_positions())
+    view(npm)
 
 import code
 code.interact(local=locals())
