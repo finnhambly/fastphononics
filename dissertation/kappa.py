@@ -1,7 +1,7 @@
 # SETTINGS
 #------------------------------------------------------------------------------#
 # choose structure
-structure = 'thickmembrane'
+structure = 'bulk'
 # choose mode
 mode = 'gap'
 # choose whether to use display
@@ -163,12 +163,12 @@ for i in range(len(t)):
         ( lbte.get_temperatures()[i], lbte.get_kappa_RTA()[0][i][1]))
 
 # save data
-ph3py = Phono3pyYaml()
-phonon.calculator = 'crystal'
-ph3py.set_phonon_info(phonon)
-filename='phono3py_params_'+structure+mode+'.yaml'
-with open(filename, 'w') as w:
-	w.write(str(ph3py))
+#ph3py = Phono3pyYaml()
+#phonon.calculator = 'crystal'
+#ph3py.set_phonon_info(phonon)
+#filename='phono3py_params_'+structure+mode+'.yaml'
+#with open(filename, 'w') as w:
+#	w.write(str(ph3py))
 
 write_fc3_dat(fc3, filename='fc3'+structure+mode+'.dat')
 write_fc2_dat(fc2, filename='fc2'+structure+mode+'.dat')

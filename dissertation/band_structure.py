@@ -12,7 +12,7 @@ from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
 # SETTINGS
 #------------------------------------------------------------------------------#
 # choose structure
-structure = 'thickmembrane'
+structure = 'thickmembrane_sc'
 # choose mode
 mode = 'gap'
 # choose whether to use display
@@ -62,13 +62,9 @@ npm.set_calculator(calc)
 # structure optimisation
 dyn = LBFGS(atoms=npm, trajectory=structure+mode+'.traj',
     restart=structure+mode+'.pckl')
-dyn.run(fmax=0.001)
+dyn.run(fmax=0.01)
 if (gui):
     view(npm)
-
-import code
-code.interact(local=locals())
-
 
 # create object for phonopy calculations
 unitcell = PhonopyAtoms(npm.get_chemical_symbols(),
