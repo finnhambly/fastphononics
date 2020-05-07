@@ -12,17 +12,17 @@ from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
 # SETTINGS
 #------------------------------------------------------------------------------#
 # choose structure
-structure = 'thickmembrane_sc'
+structure = 'membrane'
 # choose mode
-mode = 'gap'
+mode = 'sw'
 # choose whether to use display
 gui = True
 # set band structure labels
-latex_labels = False
+latex_labels = True
 #------------------------------------------------------------------------------#
 
 # import unit cell
-npm = ase.io.read(structure+'.xyz')
+lattice = ase.io.read(structure+'.xyz')
 
 # set up calculator
 if mode == 'gap':
@@ -57,19 +57,34 @@ else:
     print('Please select a valid mode')
 
 # set interatomic potential
-npm.set_calculator(calc)
+lattice.set_calculator(calc)
 
+# calculate the predicted error
+if mode == 'gap':
+    calc.calc_args="local_gap_variance"
+    lattice.get_potential_energy()
+    predicted_error = np.sqrt(lattice.arrays["local_gap_variance"])
+    print("Maximum force RMSE", np.amax(predicted_error))
+    lattice.set_initial_charges(predicted_error*100)
+    if (gui):
+        view(lattice) # set colours by initial charge
 # structure optimisation
-dyn = LBFGS(atoms=npm, trajectory=structure+mode+'.traj',
+dyn = LBFGS(atoms=lattice, trajectory=structure+mode+'.traj',
     restart=structure+mode+'.pckl')
 dyn.run(fmax=0.01)
-if (gui):
-    view(npm)
+
+# calculate the predicted error after the optimisation
+if mode == 'gap':
+    lattice.get_potential_energy()
+    predicted_error = np.sqrt(lattice.arrays["local_gap_variance"])
+    lattice.set_initial_charges(predicted_error*100)
+    if (gui):
+        view(lattice) # set colours by initial charge
 
 # create object for phonopy calculations
-unitcell = PhonopyAtoms(npm.get_chemical_symbols(),
-                    cell=npm.get_cell(),
-                    scaled_positions=npm.get_scaled_positions())
+unitcell = PhonopyAtoms(lattice.get_chemical_symbols(),
+                    cell=lattice.get_cell(),
+                    scaled_positions=lattice.get_scaled_positions())
 # create supercell
 if structure == 'bulk':
     smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]
@@ -77,7 +92,7 @@ else:
     smat = [(2, 0, 0), (0, 2, 0), (0, 0, 1)]
 phonon = Phonopy(unitcell, smat, primitive_matrix='auto')
 phonon.generate_displacements(distance=0.03)
-phonon.save(filename='phonopy_params_'+structure+mode+'.yaml'),
+phonon.save(filename='phonopy_params_'+structure+mode+'.yaml')
 # calculate displacements
 print("[Phonopy] Atomic displacements:")
 disps = phonon.get_displacements()
@@ -126,10 +141,10 @@ phonon.save(filename="phonopy_params_"+structure+mode+".yaml",
     settings={'force_constants': True, 'create_displacements': True})
 
 # plot band structure
-path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
+path = [[[0, 0, 0], [0.5, 0, 0], [0.5, 0.5, 0], [0, 0, 0]]] # path through 2D
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 if (latex_labels):
-    labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
+    labels = ["$\\Gamma$", "X", "L", "$\\Gamma$"]
     phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 else:
         phonon.run_band_structure(qpoints, path_connections=connections)

@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------#
-structure = 'thickmembrane'
-mode = 'gap'
+structure = 'membrane'
+mode = 'sw'
 gui = True
 latex_labels = True
 #------------------------------------------------------------------------------#
@@ -10,6 +10,7 @@ from ase import Atoms
 from phonopy.structure.atoms import PhonopyAtoms
 import quippy, quippy.descriptors
 from quippy.potential import Potential
+from ase.visualize import view
 import phonopy
 import phono3py
 # band structure
@@ -32,10 +33,10 @@ for omega, dos in np.array(phonon.get_total_DOS()).T:
     print("%15.7f%15.7f" % (omega, dos))
 
 # plot band structure
-path = [[[0, 0, 0], [0, 0.5, 0.5], [0.25, 0.75, 0.5], [0, 0, 0], [0.5, 0.5, 0.5]]]
+path = [[[0, 0, 0], [0.5, 0, 0], [0.5, 0.5, 0], [0, 0, 0]]]
 qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=51)
 if (latex_labels):
-    labels = ["$\\Gamma$", "X", "K", "$\\Gamma$", "L"]
+    labels = ["$\\Gamma$", "X", "L", "$\\Gamma$"]
     phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
 else:
         phonon.run_band_structure(qpoints, path_connections=connections)
@@ -70,7 +71,7 @@ if (gui):
     unitcell = phonon.get_unitcell()
     npm = Atoms(unitcell.get_chemical_symbols(),
         cell=unitcell.get_cell(),
-        scaled_positions=unitcell.get_scaled_positions())                                                                                         >>> npm = Atoms(unitcell.get_chemical_symbols(), cell=unitcell.get_cell(), scaled_positions=unitcell.get_scaled_positions())
+        scaled_positions=unitcell.get_scaled_positions())
     view(npm)
 
 import code

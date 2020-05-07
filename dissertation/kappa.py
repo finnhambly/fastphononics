@@ -3,7 +3,7 @@
 # choose structure
 structure = 'bulk'
 # choose mode
-mode = 'gap'
+mode = 'sw'
 # choose whether to use display
 gui = False
 # choose whether force constants should be written for ShengBTE
@@ -25,7 +25,7 @@ from phono3py.file_IO import parse_fc2, parse_fc3
 from phonopy.file_IO import write_FORCE_SETS
 
 # import unit cell
-npm = ase.io.read(structure+'.xyz')
+lattice = ase.io.read(structure+'.xyz')
 
 # set up calculator
 if mode == 'gap':
@@ -59,19 +59,19 @@ elif mode == 'sw':
 else:
     print('Please select a valid mode')
 
-npm.set_calculator(calc)
+lattice.set_calculator(calc)
 
 # structure optimisation
-dyn = LBFGS(atoms=npm, trajectory=structure+mode+'.traj',
+dyn = LBFGS(atoms=lattice, trajectory=structure+mode+'.traj',
     restart=structure+mode+'.pckl')
 dyn.run(fmax=0.001)
 if (gui):
-    view(npm)
+    view(lattice)
 
 # create object for phonopy calculations
-unitcell = PhonopyAtoms(npm.get_chemical_symbols(),
-                    cell=npm.get_cell(),
-                    scaled_positions=npm.get_scaled_positions())
+unitcell = PhonopyAtoms(lattice.get_chemical_symbols(),
+                    cell=lattice.get_cell(),
+                    scaled_positions=lattice.get_scaled_positions())
 # create supercell
 if structure == 'bulk':
     smat = [(2, 0, 0), (0, 2, 0), (0, 0, 2)]

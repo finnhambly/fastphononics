@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------#
-structure = 'thickmembrane'
+structure = 'bestwall'
 mode = 'gap'
 #------------------------------------------------------------------------------#
 from quippy.potential import Potential
@@ -8,6 +8,7 @@ import numpy as np
 import os
 import sys
 import builtins
+import ase
 from ase.io.trajectory import Trajectory
 from ase.visualize import view
 
